@@ -1,8 +1,8 @@
 """Repository readiness checks."""
+from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Dict, List, Union
 
 
 @dataclass(frozen=True)
@@ -13,7 +13,7 @@ class Check:
     recommendation: str = ""
 
 
-def audit_repository(path: Union[str, Path]) -> List[Check]:
+def audit_repository(path: str | Path) -> list[Check]:
     """Check common maintenance files in a repository directory."""
     root = Path(path).expanduser().resolve()
     if not root.exists():
@@ -61,7 +61,7 @@ def audit_repository(path: Union[str, Path]) -> List[Check]:
     return checks
 
 
-def summarize(checks: List[Check]) -> Dict[str, object]:
+def summarize(checks: list[Check]) -> dict[str, object]:
     counts = {status: sum(check.status == status for check in checks)
               for status in ("pass", "warn", "fail")}
     return {"summary": counts, "checks": [asdict(check) for check in checks]}

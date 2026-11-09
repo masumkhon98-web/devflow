@@ -38,7 +38,7 @@ def main():
             lines.append(f"{check.status.upper():<4} {check.name:<20} {check.message}")
             if check.recommendation:
                 lines.append(f"     Recommendation: {check.recommendation}")
-        lines.extend(["", "Summary: {0} passed, {1} warnings, {2} failed".format(
+        lines.extend(["", "Summary: {} passed, {} warnings, {} failed".format(
             counts["pass"], counts["warn"], counts["fail"])])
         output = "\n".join(lines) + "\n"
 

@@ -1,20 +1,19 @@
 """DevFlow report formatters."""
 
 import json
-from typing import List
 
 from .audit import Check, summarize
 
 
-def render_json(checks: List[Check]) -> str:
+def render_json(checks: list[Check]) -> str:
     return json.dumps(summarize(checks), indent=2)
 
 
-def render_markdown(checks: List[Check], target: str) -> str:
+def render_markdown(checks: list[Check], target: str) -> str:
     counts = summarize(checks)["summary"]
     lines = [
         f"# DevFlow audit: `{target}`", "",
-        "**Summary:** {0} passed, {1} warnings, {2} failed".format(
+        "**Summary:** {} passed, {} warnings, {} failed".format(
             counts["pass"], counts["warn"], counts["fail"]),
         "", "| Status | Check | Finding | Recommendation |",
         "|---|---|---|---|",
