@@ -2,6 +2,7 @@
 
 import json
 from typing import List
+
 from .audit import Check, summarize
 
 
@@ -12,7 +13,7 @@ def render_json(checks: List[Check]) -> str:
 def render_markdown(checks: List[Check], target: str) -> str:
     counts = summarize(checks)["summary"]
     lines = [
-        "# DevFlow audit: `{}`".format(target), "",
+        f"# DevFlow audit: `{target}`", "",
         "**Summary:** {0} passed, {1} warnings, {2} failed".format(
             counts["pass"], counts["warn"], counts["fail"]),
         "", "| Status | Check | Finding | Recommendation |",
@@ -21,6 +22,5 @@ def render_markdown(checks: List[Check], target: str) -> str:
     for check in checks:
         message = check.message.replace("|", r"\|")
         recommendation = check.recommendation.replace("|", r"\|")
-        lines.append("| {} | {} | {} | {} |".format(
-            check.status.upper(), check.name, message, recommendation))
+        lines.append(f"| {check.status.upper()} | {check.name} | {message} | {recommendation} |")
     return "\n".join(lines) + "\n"

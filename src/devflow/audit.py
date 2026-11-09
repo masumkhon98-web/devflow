@@ -17,9 +17,9 @@ def audit_repository(path: Union[str, Path]) -> List[Check]:
     """Check common maintenance files in a repository directory."""
     root = Path(path).expanduser().resolve()
     if not root.exists():
-        raise FileNotFoundError("Repository path does not exist: {}".format(root))
+        raise FileNotFoundError(f"Repository path does not exist: {root}")
     if not root.is_dir():
-        raise NotADirectoryError("Repository path is not a directory: {}".format(root))
+        raise NotADirectoryError(f"Repository path is not a directory: {root}")
 
     checks = []
 
@@ -27,7 +27,7 @@ def audit_repository(path: Union[str, Path]) -> List[Check]:
         checks.append(Check(
             name=name,
             status="pass" if exists else missing_status,
-            message=message if exists else "{} is missing.".format(name),
+            message=message if exists else f"{name} is missing.",
             recommendation="" if exists else recommendation,
         ))
 

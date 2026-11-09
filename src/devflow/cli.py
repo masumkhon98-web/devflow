@@ -3,6 +3,7 @@
 import argparse
 import sys
 from pathlib import Path
+
 from .audit import audit_repository, summarize
 from .report import render_json, render_markdown
 
@@ -23,7 +24,7 @@ def main():
     try:
         checks = audit_repository(args.path)
     except (OSError, ValueError) as exc:
-        print("devflow: {}".format(exc), file=sys.stderr)
+        print(f"devflow: {exc}", file=sys.stderr)
         return 2
 
     if args.format == "json":
@@ -32,12 +33,11 @@ def main():
         output = render_markdown(checks, str(Path(args.path)))
     else:
         counts = summarize(checks)["summary"]
-        lines = ["DevFlow repository audit: {}".format(args.path)]
+        lines = [f"DevFlow repository audit: {args.path}"]
         for check in checks:
-            lines.append("{:<4} {:<20} {}".format(
-                check.status.upper(), check.name, check.message))
+            lines.append(f"{check.status.upper():<4} {check.name:<20} {check.message}")
             if check.recommendation:
-                lines.append("     Recommendation: {}".format(check.recommendation))
+                lines.append(f"     Recommendation: {check.recommendation}")
         lines.extend(["", "Summary: {0} passed, {1} warnings, {2} failed".format(
             counts["pass"], counts["warn"], counts["fail"])])
         output = "\n".join(lines) + "\n"
@@ -46,7 +46,7 @@ def main():
         try:
             Path(args.output).write_text(output, encoding="utf-8")
         except OSError as exc:
-            print("devflow: could not write report: {}".format(exc), file=sys.stderr)
+            print(f"devflow: could not write report: {exc}", file=sys.stderr)
             return 2
     else:
         print(output, end="")
